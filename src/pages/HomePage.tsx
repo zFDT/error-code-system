@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ErrorCodeSearch from '../components/ErrorCodeSearch';
-import ProjectList from '../components/ProjectList';
 
 const HomePage = () => {
   return (
@@ -11,10 +10,10 @@ const HomePage = () => {
         <ErrorCodeSearch />
       </section>
       {/* 项目列表模块 */}
-      <section>
+      {/* <section>
         <h2>项目列表</h2>
         <ProjectList />
-      </section>
+      </section> */}
     </div>
   );
 };

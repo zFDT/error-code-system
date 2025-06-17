@@ -8,11 +8,11 @@
         <label for="projectCode">项目编码 (001):</label>
         <input type="text" v-model="projectCode" required />
         <span v-if="codeError" class="error">{{ codeError }}</span>
-      <button type="submit">创建项目</button>
       </div>
+      <button type="submit">创建项目</button>
     </form>
   </div>
-    <div>
+  <div>
     <h1>项目列表</h1>
     <table class="project-table">
       <thead>
@@ -28,7 +28,7 @@
         <template v-else-if="projects.length">
           <tr v-for="project in projects" :key="project.id">
             <td>
-              <a :href="`/project/${project.id}/modules`">{{ project.name }}</a>
+              <a href="javascript:;" @click.prevent="goToModules(project)">{{ project.name }}</a>
             </td>
             <td>{{ project.projectCode }}</td>
           </tr>
@@ -41,60 +41,54 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  setup() {
-    const projectName = ref('');
-    const projectCode = ref('');
-    const codeError = ref('');
-    const projects = ref<any[]>([]);
-  const loading = ref<boolean>(true);
-    // 加载项目列表
-    const fetchProjects = async () => {
-      loading.value = true;
-      const res = await fetch('/api/project');
-      const data = await res.json();
-      projects.value = data.data || [];
-      loading.value = false;
-    };
+const projectName = ref('');
+const projectCode = ref('');
+const codeError = ref('');
+const projects = ref<any[]>([]);
+const loading = ref<boolean>(true);
+const router = useRouter()
 
-    onMounted(() => {
-      fetchProjects();
-    });
+// 加载项目列表
+const fetchProjects = async () => {
+  loading.value = true;
+  const res = await fetch('/api/project');
+  const data = await res.json();
+  projects.value = data.data || [];
+  loading.value = false;
+};
 
-    const createProject = async () => {
-      try {
-        const res = await fetch('/api/project', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: projectName.value, projectCode: projectCode.value })
-        });
-        const data = await res.json();
-        if (data.code !== 0) {
-          codeError.value = data.message;
-        } else {
-          codeError.value = '';
-          projectName.value = '';
-          projectCode.value = '';
-          fetchProjects();
-        }
-      } catch (e: any) {
-        codeError.value = e.message;
-      }
-    };
-
-    return {
-      projectName,
-      projectCode,
-      codeError,
-      projects,
-      createProject,
- loading,
-    };
-  },
+onMounted(() => {
+  fetchProjects();
 });
+
+const createProject = async () => {
+  try {
+    const res = await fetch('/api/project', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: projectName.value, projectCode: projectCode.value })
+    });
+    const data = await res.json();
+    if (data.code !== 0) {
+      codeError.value = data.message;
+    } else {
+      codeError.value = '';
+      projectName.value = '';
+      projectCode.value = '';
+      fetchProjects();
+    }
+  } catch (e: any) {
+    codeError.value = e.message;
+  }
+};
+
+function goToModules(project) {
+  router.push({ path: '/modules', query: { project: project.id } })
+}
 </script>
 
 <style scoped>

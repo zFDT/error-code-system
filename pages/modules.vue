@@ -6,16 +6,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import ModuleList from '@/components/ModuleList.vue';
-import ModuleCreate from '@/components/ModuleCreate.vue';
-
-export default {
-  components: {
-    ModuleList,
-    ModuleCreate
-  }
-};
+<script setup lang="ts">
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const projectId = route.query.project
+// 根据 projectId 查询模块列表
 </script>
 
 <style scoped>
