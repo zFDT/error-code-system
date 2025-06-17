@@ -10,13 +10,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import store from '@/store';
+import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'ModuleList',
   setup() {
-    const modules = computed(() => store.state.modules);
+    const modules = ref<any[]>([]);
+
+    const fetchModules = async () => {
+      const res = await axios.get('/api/modules');
+      modules.value = res.data;
+    };
+
+    onMounted(fetchModules);
 
     return {
       modules,

@@ -21,13 +21,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import store from '@/store';
+import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'ErrorList',
   setup() {
-    const errors = computed(() => store.state.errors);
+    const errors = ref<any[]>([]);
+
+    const fetchErrors = async () => {
+      const res = await axios.get('/api/errors');
+      errors.value = res.data;
+    };
+
+    onMounted(fetchErrors);
 
     return {
       errors,

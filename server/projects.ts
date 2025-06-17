@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
       const project = await prisma.project.create({
         data: {
           name: body.name,
-          code: body.code,
+          projectCode: body.projectCode,
         },
       });
       return project;

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import store from '@/store';
+import axios from 'axios';
 
 export default {
   setup() {
@@ -26,10 +26,14 @@ export default {
     const errorDescription = ref('');
     const errorCode = ref('');
 
-    const createError = () => {
-      store.createError(errorName.value, errorDescription.value);
+    const createError = async () => {
+      await axios.post('/api/errors', {
+        name: errorName.value,
+        description: errorDescription.value,
+      });
       // 获取最新错误码
-      const lastError = store.state.errors[store.state.errors.length - 1];
+      const res = await axios.get('/api/errors');
+      const lastError = res.data[res.data.length - 1];
       errorCode.value = lastError?.errorCode || '';
       errorName.value = '';
       errorDescription.value = '';

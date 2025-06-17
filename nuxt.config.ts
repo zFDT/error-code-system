@@ -6,11 +6,18 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
-    '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/scripts',
     '@nuxt/test-utils',
     '@nuxt/ui',
     '@pinia/nuxt',
-  ]
+  ],
+
+  fonts: {
+    providers: {
+      google: false,
+      googleicons: false
+    }, // ← 此处添加逗号
+    // 你可以在这里配置本地字体
+  },
 })

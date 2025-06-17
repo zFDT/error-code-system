@@ -23,18 +23,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import store from '@/store';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 const moduleName = ref('');
 const moduleCode = ref('');
 const codeExists = ref(false);
-const modules = computed(() => store.state.modules);
+const modules = ref<any[]>([]);
 
-const createModule = () => {
-  if (!modules.value.find((module: any) => module.code === moduleCode.value)) {
+const fetchModules = async () => {
+  const res = await axios.get('/api/modules');
+  modules.value = res.data;
+};
+
+onMounted(fetchModules);
+
+const createModule = async () => {
+  if (!modules.value.find((module: any) => module.moduleCode === moduleCode.value)) {
     try {
-      store.createModule(moduleName.value, moduleCode.value);
+      await axios.post('/api/modules', {
+        name: moduleName.value,
+        moduleCode: moduleCode.value,
+      });
+      await fetchModules();
       moduleName.value = '';
       moduleCode.value = '';
       codeExists.value = false;

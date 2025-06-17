@@ -21,22 +21,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
-import store from '@/store';
+import { defineComponent, ref, onMounted } from 'vue';
 
 export default defineComponent({
   setup() {
     const projectName = ref('');
     const projectCode = ref('');
     const codeError = ref('');
-    const projects = computed(() => store.state.projects);
+    const projects = ref<any[]>([]);
 
-    const createProject = () => {
+    // 加载项目列表
+    async function fetchProjects() {
+      // 修复：确保 fetch 的 URL 是字符串 '/api/project'
+      const res = await fetch('/api/project');
+      const data = await res.json();
+      projects.value = data.data || [];
+    }
+    onMounted(() => {
+      fetchProjects();
+    });
+
+    const createProject = async () => {
       try {
-        store.createProject(projectName.value, projectCode.value);
-        codeError.value = '';
-        projectName.value = '';
-        projectCode.value = '';
+        const res = await fetch('/api/project', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: projectName.value, projectCode: projectCode.value })
+        });
+        const data = await res.json();
+        if (data.code !== 0) {
+          codeError.value = data.message;
+        } else {
+          codeError.value = '';
+          projectName.value = '';
+          projectCode.value = '';
+          fetchProjects();
+        }
       } catch (e: any) {
         codeError.value = e.message;
       }

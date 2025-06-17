@@ -34,9 +34,10 @@ model Module {
 
 model Error {
   id          Int     @id @default(autoincrement())
-  name        String
-  description String
-  errorCode   String  @unique // 完整错误码，如001-001-000
+  name        String  // 错误名称
+  description String  // 错误描述
+  errorCode   String  // 错误编号，如001
   moduleId    Int
   module      Module  @relation(fields: [moduleId], references: [id])
+  @@unique([moduleId, errorCode]) // 同一模块下错误编号唯一
 }
