@@ -49,7 +49,9 @@ export default defineEventHandler(async (event) => {
           projectName: e.module?.project?.name || '',
           moduleName: e.module?.name || '',
           name: e.name,
-          description: e.description
+          description: e.description,
+          moduleId: e.moduleId,
+          projectId: e.module?.project?.id
         })
       })
       // 合并：有错误码的模块返回所有错误码，无错误码的模块返回空错误信息
@@ -62,7 +64,9 @@ export default defineEventHandler(async (event) => {
             projectName: p.name,
             moduleName: '',
             name: '',
-            description: ''
+            description: '',
+            moduleId: undefined,
+            projectId: p.id
           })
         } else {
           for (const m of p.modules) {
@@ -74,7 +78,9 @@ export default defineEventHandler(async (event) => {
                 projectName: p.name,
                 moduleName: m.name,
                 name: '',
-                description: ''
+                description: '',
+                moduleId: m.id,
+                projectId: p.id
               })
             }
           }
@@ -123,7 +129,9 @@ export default defineEventHandler(async (event) => {
           projectName: e.module?.project?.name || '',
           moduleName: e.module?.name || '',
           name: e.name,
-          description: e.description
+          description: e.description,
+          moduleId: e.moduleId,
+          projectId: e.module?.project?.id
         })
       })
       // 合并：有错误码的模块返回所有错误码，无错误码的模块返回空错误信息
@@ -137,7 +145,9 @@ export default defineEventHandler(async (event) => {
             projectName: m.project?.name || '',
             moduleName: m.name,
             name: '',
-            description: ''
+            description: '',
+            moduleId: m.id,
+            projectId: m.project?.id
           })
         }
       }
@@ -166,7 +176,9 @@ export default defineEventHandler(async (event) => {
       projectName: e.module?.project?.name || '',
       moduleName: e.module?.name || '',
       name: e.name,
-      description: e.description
+      description: e.description,
+      moduleId: e.moduleId,
+      projectId: e.module?.project?.id
     }))
 
     console.log('[API] /api/error-code 响应内容:', data)

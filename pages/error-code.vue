@@ -22,7 +22,13 @@
         </tr>
         <template v-else-if="results.length">
           <tr v-for="item in results" :key="item.errorCode">
-            <td>{{ item.errorCode }}</td>
+            <td
+              class="error-link"
+              @click="goDetail(item)"
+              style="cursor:pointer;color:#1677ff;text-decoration:underline;"
+            >
+              {{ item.errorCode }}
+            </td>
             <td>{{ item.projectName }}</td>
             <td>{{ item.moduleName }}</td>
             <td>{{ item.name }}</td>
@@ -39,11 +45,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const query = ref('')
 const results = ref<any[]>([])
 const loading = ref(false)
 let timer: any = null
+const router = useRouter()
 
 async function fetchErrorCodes(q: string) {
   loading.value = true
@@ -68,6 +76,22 @@ function onInput() {
   timer = setTimeout(() => {
     fetchErrorCodes(query.value.trim())
   }, 400)
+}
+
+function goDetail(item: any) {
+  if (item.name || item.moduleName) {
+    // 有错误或只有模块，跳转到错误详情页，带 moduleId 和 projectId
+    router.push({
+      path: '/errors',
+      query: { moduleId: item.moduleId, projectId: item.projectId }
+    })
+  } else {
+    // 只有项目，跳转到模块页面，带 project
+    router.push({
+      path: '/modules',
+      query: { project: item.projectId }
+    })
+  }
 }
 </script>
 
