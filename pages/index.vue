@@ -1,7 +1,7 @@
 <!--
  * @Date: 2025-06-17 11:04:47
  * @LastEditors: zhanghongxin2 zhanghongxin2@dreame.tech
- * @LastEditTime: 2025-06-17 11:48:13
+ * @LastEditTime: 2025-06-17 15:04:31
  * @FilePath: \error-code-system\pages\index.vue
 -->
 <template>
@@ -10,8 +10,8 @@
     <nav>
       <ul>
         <li><nuxt-link to="/projects">项目管理</nuxt-link></li>
-        <li><nuxt-link to="/modules">模块管理</nuxt-link></li>
-        <li><nuxt-link to="/errors">错误管理</nuxt-link></li>
+        <!-- <li><nuxt-link to="/modules">模块管理</nuxt-link></li> -->
+        <!-- <li><nuxt-link to="/errors">错误管理</nuxt-link></li> -->
         <li><nuxt-link to="/error-code">错误码查询</nuxt-link></li>
       </ul>
     </nav>

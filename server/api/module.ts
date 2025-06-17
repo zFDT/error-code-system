@@ -6,14 +6,27 @@ export default defineEventHandler(async (event) => {
   if (method === 'GET') {
     const query = getQuery(event)
     console.log('[API] /api/module 请求参数:', query)
-    // 查询所有模块
-    const where = query.projectId ? { projectId: Number(query.projectId) } : {}
+    // 修正：应使用 query.project 作为过滤条件
+    const where = query.project ? { projectId: Number(query.project) } : {}
     const modules = await prisma.module.findMany({
       where,
-      select: { id: true, name: true, moduleCode: true, projectId: true }
+      select: {
+        id: true,
+        name: true,
+        moduleCode: true,
+        projectId: true,
+        project: { select: { name: true } }
+      }
     })
-    console.log('[API] /api/module 响应内容:', modules)
-    return { code: 0, data: modules }
+    const result = modules.map(m => ({
+      id: m.id,
+      name: m.name,
+      moduleCode: m.moduleCode,
+      projectId: m.projectId,
+      projectName: m.project?.name || ''
+    }))
+    console.log('[API] /api/module 响应内容:', result)
+    return { code: 0, data: result }
   }
   if (method === 'POST') {
     const body = await readBody(event)

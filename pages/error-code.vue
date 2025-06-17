@@ -9,10 +9,10 @@
     <table>
       <thead>
         <tr>
-          <th>错误码</th>
-          <th>项目名称</th>
-          <th>模块名称</th>
-          <th>错误名称</th>
+          <th style="width: 140px;">错误码</th>
+          <th style="width: 160px;">项目名称</th>
+          <th style="width: 120px;">模块名称</th>
+          <th style="width: 120px;">错误名称</th>
           <th>错误描述</th>
         </tr>
       </thead>
@@ -20,17 +20,15 @@
         <tr v-if="loading">
           <td colspan="5">查询中...</td>
         </tr>
-        <tr v-else-if="results.length">
-          <template v-for="item in results" :key="item.code">
-            <tr>
-              <td>{{ item.code }}</td>
-              <td>{{ item.projectName }}</td>
-              <td>{{ item.moduleName }}</td>
-              <td>{{ item.errorName }}</td>
-              <td>{{ item.errorDescription }}</td>
-            </tr>
-          </template>
-        </tr>
+        <template v-else-if="results.length">
+          <tr v-for="item in results" :key="item.errorCode">
+            <td>{{ item.errorCode }}</td>
+            <td>{{ item.projectName }}</td>
+            <td>{{ item.moduleName }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+          </tr>
+        </template>
         <tr v-else-if="query && !loading">
           <td colspan="5">未找到匹配的错误码。</td>
         </tr>
@@ -75,7 +73,7 @@ function onInput() {
 
 <style scoped>
 .error-code-search {
-  max-width: 800px;
+  max-width: 900px;
   margin: 40px auto;
   padding: 24px;
   border: 1px solid #eee;
@@ -92,10 +90,17 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
+  background: #fff;
+  font-size: 15px;
 }
 th, td {
   border: 1px solid #eee;
-  padding: 8px;
+  padding: 8px 12px;
   text-align: left;
+  word-break: break-all;
+}
+th {
+  background: #f5f7fa;
+  font-weight: 600;
 }
 </style>
