@@ -5,7 +5,6 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "dev:all": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -33,5 +32,4 @@
   "devDependencies": {
     "concurrently": "^9.1.2"
   }
-}
 }
