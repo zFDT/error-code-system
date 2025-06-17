@@ -11,7 +11,8 @@ export default defineEventHandler(async (event) => {
   try {
     // 判断是否为 1~3 位 projectCode 前缀（如 0、00、006）或 XXX-、XXX-XX 查询
     const projectPrefixMatch = q.match(/^(\d{1,3})$/)
-    const modulePrefixMatch = q.match(/^(\d{3})-(\d{0,2})$/)
+    // 修改此处，支持 moduleCode 为字母或数字
+    const modulePrefixMatch = q.match(/^(\d{3})-([a-zA-Z0-9]{0,2})$/)
     if (projectPrefixMatch) {
       const projectCodePrefix = projectPrefixMatch[1]
       // 查找所有匹配项目
