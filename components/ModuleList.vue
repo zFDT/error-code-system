@@ -2,7 +2,7 @@
   <div>
     <h1>模块列表</h1>
     <ul>
-      <li v-for="module in modules" :key="module.id">
+      <li v-for="module in modules" :key="module.code">
         {{ module.name }} - {{ module.code }}
       </li>
     </ul>
@@ -10,14 +10,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, computed } from 'vue';
+import store from '@/store';
 
 export default defineComponent({
   name: 'ModuleList',
   setup() {
-    const store = useStore();
-    const modules = store.state.modules;
+    const modules = computed(() => store.state.modules);
 
     return {
       modules,

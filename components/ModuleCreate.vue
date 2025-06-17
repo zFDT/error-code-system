@@ -23,19 +23,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import store from '@/store';
 
 const moduleName = ref('');
 const moduleCode = ref('');
 const codeExists = ref(false);
-const modules = []; // Replace with your module fetching logic
+const modules = computed(() => store.state.modules);
 
 const createModule = () => {
-  if (!modules.find((module: any) => module.code === moduleCode.value)) {
-    // Replace with your module adding logic
-    moduleName.value = '';
-    moduleCode.value = '';
-    codeExists.value = false;
+  if (!modules.value.find((module: any) => module.code === moduleCode.value)) {
+    try {
+      store.createModule(moduleName.value, moduleCode.value);
+      moduleName.value = '';
+      moduleCode.value = '';
+      codeExists.value = false;
+    } catch (e: any) {
+      codeExists.value = true;
+    }
   } else {
     codeExists.value = true;
   }

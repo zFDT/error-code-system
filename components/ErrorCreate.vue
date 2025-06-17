@@ -18,21 +18,19 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { useStore } from 'vuex';
+import store from '@/store';
 
 export default {
   setup() {
-    const store = useStore();
     const errorName = ref('');
     const errorDescription = ref('');
     const errorCode = ref('');
 
     const createError = () => {
-      const newErrorCode = store.dispatch('createError', {
-        name: errorName.value,
-        description: errorDescription.value,
-      });
-      errorCode.value = newErrorCode;
+      store.createError(errorName.value, errorDescription.value);
+      // 获取最新错误码
+      const lastError = store.state.errors[store.state.errors.length - 1];
+      errorCode.value = lastError?.errorCode || '';
       errorName.value = '';
       errorDescription.value = '';
     };

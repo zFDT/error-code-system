@@ -21,27 +21,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, ref, computed } from 'vue';
+import store from '@/store';
 
 export default defineComponent({
   setup() {
-    const store = useStore();
     const projectName = ref('');
     const projectCode = ref('');
     const codeError = ref('');
-    
-    const projects = store.state.projects;
+    const projects = computed(() => store.state.projects);
 
     const createProject = () => {
-      if (store.state.projects.some(project => project.code === projectCode.value)) {
-        codeError.value = 'Project code must be unique.';
-        return;
+      try {
+        store.createProject(projectName.value, projectCode.value);
+        codeError.value = '';
+        projectName.value = '';
+        projectCode.value = '';
+      } catch (e: any) {
+        codeError.value = e.message;
       }
-      codeError.value = '';
-      store.commit('ADD_PROJECT', { name: projectName.value, code: projectCode.value });
-      projectName.value = '';
-      projectCode.value = '';
     };
 
     return {

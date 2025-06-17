@@ -1,22 +1,22 @@
 interface Project {
-  id: string;
+  id: number;
   name: string;
-  code: string; // Format: XXX
+  projectCode: string; // Format: 001
 }
 
 interface Module {
-  id: string;
+  id: number;
   name: string;
-  code: string; // Format: XX
-  projectId: string; // Reference to the associated project
+  moduleCode: string; // Format: 01
+  projectId: number; // Reference to the associated project
 }
 
-interface Error {
-  id: string;
+interface ErrorItem {
+  id: number;
   name: string;
   description: string;
-  code: string; // Format: XXX-XX-XXX
-  moduleId: string; // Reference to the associated module
+  errorCode: string; // Format: 001-01-001
+  moduleId: number; // Reference to the associated module
 }
 
-export { Project, Module, Error };
+export { Project, Module, ErrorItem };

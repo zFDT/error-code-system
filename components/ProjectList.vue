@@ -2,7 +2,7 @@
   <div>
     <h1>项目列表</h1>
     <ul>
-      <li v-for="project in projects" :key="project.id">
+      <li v-for="project in projects" :key="project.code">
         {{ project.name }} - {{ project.code }}
       </li>
     </ul>
@@ -10,14 +10,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, computed } from 'vue';
+import store from '@/store';
 
 export default defineComponent({
   name: 'ProjectList',
   setup() {
-    const store = useStore();
-    const projects = store.state.projects;
+    const projects = computed(() => store.state.projects);
 
     return {
       projects,

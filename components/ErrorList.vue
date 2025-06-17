@@ -10,8 +10,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="error in errors" :key="error.code">
-          <td>{{ error.code }}</td>
+        <tr v-for="error in errors" :key="error.errorCode">
+          <td>{{ error.errorCode }}</td>
           <td>{{ error.name }}</td>
           <td>{{ error.description }}</td>
         </tr>
@@ -21,14 +21,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, computed } from 'vue';
+import store from '@/store';
 
 export default defineComponent({
   name: 'ErrorList',
   setup() {
-    const store = useStore();
-    const errors = store.state.errors;
+    const errors = computed(() => store.state.errors);
 
     return {
       errors,
