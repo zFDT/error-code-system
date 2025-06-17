@@ -6,7 +6,13 @@
         <label for="projectName">项目名称:</label>
         <input type="text" v-model="projectName" required />
         <label for="projectCode">项目编码 (001):</label>
-        <input type="text" v-model="projectCode" required />
+        <input
+          type="text"
+          v-model="projectCode"
+          required
+          maxlength="3"
+          @input="onProjectCodeInput"
+        />
         <span v-if="codeError" class="error">{{ codeError }}</span>
       </div>
       <button type="submit">创建项目</button>
@@ -52,6 +58,13 @@ const projects = ref<any[]>([]);
 const loading = ref<boolean>(true);
 const router = useRouter()
 
+// 项目编码输入处理，只允许3位数字，不补零
+function onProjectCodeInput(e: Event) {
+  let val = (e.target as HTMLInputElement).value.replace(/\D/g, '');
+  if (val.length > 3) val = val.slice(0, 3);
+  projectCode.value = val;
+}
+
 // 加载项目列表
 const fetchProjects = async () => {
   loading.value = true;
@@ -66,6 +79,10 @@ onMounted(() => {
 });
 
 const createProject = async () => {
+  // 补零校验，防止直接提交时未补零
+  if (projectCode.value.length > 0) {
+    projectCode.value = projectCode.value.replace(/\D/g, '').padStart(3, '0').slice(0, 3);
+  }
   try {
     const res = await fetch('/api/project', {
       method: 'POST',

@@ -5,7 +5,7 @@
       <label>模块名称：</label>
       <input v-model="moduleName" />
       <label>模块编码：</label>
-      <input v-model="moduleCode" />
+      <input v-model="moduleCode" @input="onModuleCodeInput" maxlength="2" />
       <div v-if="error" class="error">{{ error }}</div>
       <div class="modal-actions">
         <button @click="handleAdd">确定</button>
@@ -26,6 +26,13 @@ const moduleName = ref('')
 const moduleCode = ref('')
 const error = ref('')
 
+// 只允许输入2位字母或数字
+function onModuleCodeInput(e: Event) {
+  let val = (e.target as HTMLInputElement).value.replace(/[^a-zA-Z0-9]/g, '')
+  if (val.length > 2) val = val.slice(0, 2)
+  moduleCode.value = val
+}
+
 async function handleAdd() {
   error.value = ''
   // 校验项目ID是否存在
@@ -35,13 +42,16 @@ async function handleAdd() {
     error.value = '项目ID不存在，无法添加模块'
     return
   }
+  // 补零校验，防止直接提交时未补零
+  let code = moduleCode.value.replace(/[^a-zA-Z0-9]/g, '').padStart(2, '0').slice(0, 2)
+  moduleCode.value = code // 补全后直接显示在输入框
   // 添加模块
   const res = await fetch('/api/module', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name: moduleName.value,
-      moduleCode: moduleCode.value,
+      moduleCode: code,
       projectId: props.projectId
     })
   })
