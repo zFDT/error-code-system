@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  projectCode String   @unique // 项目编号，唯一，如001
+  modules     Module[]
+}
+
+model Module {
+  id          Int      @id @default(autoincrement())
+  name        String
+  moduleCode  String
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+  errors      Error[]
+  @@unique([projectId, moduleCode]) // 同一项目下模块编号唯一
+}
+
+model Error {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  errorCode   String  @unique // 完整错误码，如001-001-000
+  moduleId    Int
+  module      Module  @relation(fields: [moduleId], references: [id])
+}
