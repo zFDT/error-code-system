@@ -1,22 +1,6 @@
 <template>
   <div>
-    <h1>添加新项目</h1>
-    <form @submit.prevent="createProject">
-      <div>
-        <label for="projectName">项目名称:</label>
-        <input type="text" v-model="projectName" required />
-        <label for="projectCode">项目编码 (001):</label>
-        <input
-          type="text"
-          v-model="projectCode"
-          required
-          maxlength="3"
-          @input="onProjectCodeInput"
-        />
-        <span v-if="codeError" class="error">{{ codeError }}</span>
-      </div>
-      <button type="submit">创建项目</button>
-    </form>
+    <button @click="openCreateDialog">添加新项目</button>
   </div>
   <div>
     <h1>项目列表</h1>
@@ -62,6 +46,26 @@
       <div v-if="editError" class="error">{{ editError }}</div>
     </div>
   </div>
+
+  <!-- 新增项目弹窗 -->
+  <div v-if="createDialogVisible" class="modal-overlay">
+    <div class="modal">
+      <h2>添加新项目</h2>
+      <div>
+        <label>项目名称:</label>
+        <input type="text" v-model="projectName" required />
+      </div>
+      <div>
+        <label>项目编码 (001):</label>
+        <input type="text" v-model="projectCode" required maxlength="3" @input="onProjectCodeInput" />
+      </div>
+      <span v-if="codeError" class="error">{{ codeError }}</span>
+      <div class="modal-actions">
+        <button @click="createProject">创建</button>
+        <button @click="closeCreateDialog">取消</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -95,7 +99,27 @@ onMounted(() => {
   fetchProjects();
 });
 
+const createDialogVisible = ref(false);
+function openCreateDialog() {
+  createDialogVisible.value = true;
+  codeError.value = '';
+  projectName.value = '';
+  projectCode.value = '';
+}
+function closeCreateDialog() {
+  createDialogVisible.value = false;
+  codeError.value = '';
+}
+
 const createProject = async () => {
+  if (!projectName.value.trim()) {
+    codeError.value = '项目名称不能为空';
+    return;
+  }
+  if (!projectCode.value.trim()) {
+    codeError.value = '项目编码不能为空';
+    return;
+  }
   // 补零校验，防止直接提交时未补零
   if (projectCode.value.length > 0) {
     projectCode.value = projectCode.value.replace(/\D/g, '').padStart(3, '0').slice(0, 3);
@@ -113,6 +137,7 @@ const createProject = async () => {
       codeError.value = '';
       projectName.value = '';
       projectCode.value = '';
+      closeCreateDialog();
       fetchProjects();
     }
   } catch (e: any) {
