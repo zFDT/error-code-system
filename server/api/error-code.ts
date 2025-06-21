@@ -81,6 +81,11 @@ export default defineEventHandler(async (event) => {
           }
         }
       }
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }
@@ -126,6 +131,11 @@ export default defineEventHandler(async (event) => {
           })
         }
       }
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }
@@ -151,6 +161,11 @@ export default defineEventHandler(async (event) => {
         moduleId: e.moduleId,
         projectId: e.module?.project?.id
       }))
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }
@@ -201,6 +216,11 @@ export default defineEventHandler(async (event) => {
           })
         }
       }
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }
@@ -226,6 +246,11 @@ export default defineEventHandler(async (event) => {
         moduleId: e.moduleId,
         projectId: e.module?.project?.id
       }))
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }
@@ -248,6 +273,11 @@ export default defineEventHandler(async (event) => {
         moduleId: e.moduleId,
         projectId: e.module?.project?.id
       }))
+      // 优化排序：先错误码，再模块，再项目
+      data.sort((a, b) => {
+        const getType = (x: any) => x.name ? 0 : (x.moduleName ? 1 : 2)
+        return getType(a) - getType(b)
+      })
       console.log('[API] /api/error-code 响应内容:', data)
       return { code: 0, data }
     }

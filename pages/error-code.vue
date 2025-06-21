@@ -7,21 +7,21 @@
         placeholder="项目代码 (如 006)"
         maxlength="3"
         @input="onInput"
-        style="width: 120px; margin-right: 8px;"
+        style="width: 160px; margin-right: 8px;"
       />
       <input
         v-model="moduleCode"
         placeholder="模块代码 (如 01)"
         maxlength="2"
         @input="onInput"
-        style="width: 100px; margin-right: 8px;"
+        style="width: 140px; margin-right: 8px;"
       />
       <input
         v-model="errorCode"
         placeholder="错误代码 (如 001)"
         maxlength="3"
         @input="onInput"
-        style="width: 120px;"
+        style="width: 170px;"
       />
     </div>
     <table>
@@ -140,6 +140,8 @@ input {
   padding: 8px;
   margin-right: 8px;
   font-size: 16px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 table {
   width: 100%;
