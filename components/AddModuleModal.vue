@@ -1,23 +1,21 @@
 <template>
-  <div class="modal">
-    <div class="modal-content">
-      <h3 class="modal-title">添加模块</h3>
-      <form @submit.prevent="handleAdd">
-        <div class="form-group">
-          <label for="module-name">模块名称：</label>
-          <input id="module-name" v-model="moduleName" placeholder="请输入模块名称" />
-        </div>
-        <div class="form-group">
-          <label for="module-code">模块编码：</label>
-          <input id="module-code" v-model="moduleCode" @input="onModuleCodeInput" maxlength="2" placeholder="如 01" />
-        </div>
-        <div v-if="error" class="error">{{ error }}</div>
-        <div class="modal-actions">
-          <button type="submit" class="btn btn-primary">确定</button>
-          <button type="button" class="btn btn-cancel" @click="emit('close')">取消</button>
-        </div>
-      </form>
-    </div>
+  <div class="modal-content">
+    <h3 class="modal-title">添加模块</h3>
+    <form @submit.prevent="handleAdd">
+      <div class="form-group">
+        <label for="module-name">模块名称：</label>
+        <input id="module-name" v-model="moduleName" placeholder="请输入模块名称" />
+      </div>
+      <div class="form-group">
+        <label for="module-code">模块编码：</label>
+        <input id="module-code" v-model="moduleCode" @input="onModuleCodeInput" maxlength="2" placeholder="如 01" />
+      </div>
+      <div v-if="error" class="error">{{ error }}</div>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary">确定</button>
+        <button type="button" class="btn btn-cancel" @click="emit('close')">取消</button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -68,15 +66,6 @@ async function handleAdd() {
 </script>
 
 <style scoped>
-.modal {
-  position: fixed;
-  left: 0; top: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
 .modal-content {
   background: #fff;
   padding: 32px 28px 24px 28px;

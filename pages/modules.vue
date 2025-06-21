@@ -1,25 +1,33 @@
 <template>
   <div>
-    <h1>模块列表</h1>
-    <button @click="showAdd = true">添加模块</button>
-    <AddModuleModal
-      v-if="showAdd"
-      :project-id="projectId"
-      @close="showAdd = false"
-      @success="handleAddSuccess"
-    />
+    <div class="header-bar">
+      <div class="header-left">
+        <button @click="goHome">首页</button>
+        <button @click="goBack">返回上一页</button>
+      </div>
+      <div class="header-title">{{ projectName }}模块列表</div>
+      <div class="header-right">
+        <button @click="showAdd = true">添加模块</button>
+      </div>
+    </div>
+    <div v-if="showAdd" class="modal-overlay">
+      <AddModuleModal
+        :project-id="projectId"
+        @close="showAdd = false"
+        @success="handleAddSuccess"
+      />
+    </div>
     <table class="module-table">
       <thead>
         <tr>
           <th>模块名称</th>
           <th>模块编码</th>
-          <th>项目名称</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="loading">
-          <td colspan="4">加载中...</td>
+          <td colspan="3">加载中...</td>
         </tr>
         <template v-else-if="modules.length">
           <tr v-for="module in modules" :key="module.id">
@@ -27,29 +35,28 @@
               <a href="javascript:;" @click.prevent="goToErrorCodes(module)">{{ module.name }}</a>
             </td>
             <td>{{ module.moduleCode }}</td>
-            <td>{{ module.projectName }}</td>
             <td>
               <button @click="openEditDialog(module)">编辑</button>
             </td>
           </tr>
         </template>
         <tr v-else>
-          <td colspan="4">暂无模块数据。</td>
+          <td colspan="3">暂无模块数据。</td>
         </tr>
       </tbody>
     </table>
-  </div>
 
-  <!-- 编辑模块名称弹窗 -->
-  <div v-if="editDialogVisible" class="modal-overlay">
-    <div class="modal">
-      <h2>编辑模块名称</h2>
-      <input v-model="editModuleName" type="text" />
-      <div class="modal-actions">
-        <button @click="submitEdit">保存</button>
-        <button @click="closeEditDialog">取消</button>
+    <!-- 编辑模块名称弹窗 -->
+    <div v-if="editDialogVisible" class="modal-overlay">
+      <div class="modal">
+        <h2>编辑模块名称</h2>
+        <input v-model="editModuleName" type="text" />
+        <div class="modal-actions">
+          <button @click="submitEdit">保存</button>
+          <button @click="closeEditDialog">取消</button>
+        </div>
+        <div v-if="editError" class="error">{{ editError }}</div>
       </div>
-      <div v-if="editError" class="error">{{ editError }}</div>
     </div>
   </div>
 </template>
@@ -69,6 +76,14 @@ const editDialogVisible = ref(false)
 const editModule = ref<any>(null)
 const editModuleName = ref('')
 const editError = ref('')
+const projectName = ref('')
+
+async function fetchProjectName() {
+  if (!projectId) return
+  const res = await fetch(`/api/project/${projectId}`)
+  const json = await res.json()
+  projectName.value = json.data?.name || ''
+}
 
 async function fetchModules() {
   loading.value = true
@@ -121,13 +136,40 @@ const submitEdit = async () => {
     editError.value = e.message
   }
 }
-
+function goHome() {
+  router.push('/')
+}
+function goBack() {
+  router.back()
+}
 onMounted(() => {
+  fetchProjectName()
   fetchModules()
 })
 </script>
 
 <style scoped>
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.header-left {
+  display: flex;
+  gap: 8px;
+}
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
 h1 {
   margin-bottom: 20px;
 }
