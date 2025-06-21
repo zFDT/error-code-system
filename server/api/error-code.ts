@@ -1,7 +1,11 @@
 import { defineEventHandler, getQuery } from 'h3'
-import { PrismaClient } from '@prisma/client'
+import { getPrisma } from '../prisma'
 
-const prisma = new PrismaClient()
+const prisma = getPrisma()
+
+function isValidCode(str: string, len: number) {
+  return typeof str === 'string' && str.length <= len && /^[A-Z0-9]*$/.test(str)
+}
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -10,6 +14,15 @@ export default defineEventHandler(async (event) => {
   const errorCode = (query.errorCode || '').toString().toUpperCase()
   console.log('[API] /api/error-code 请求参数:', { projectCode, moduleCode, errorCode })
   if (!projectCode && !moduleCode && !errorCode) return { code: 0, data: [] }
+
+  // 参数校验
+  if (
+    (projectCode && !isValidCode(projectCode, 3)) ||
+    (moduleCode && !isValidCode(moduleCode, 2)) ||
+    (errorCode && !isValidCode(errorCode, 3))
+  ) {
+    return { code: 400, message: '参数格式错误' }
+  }
 
   try {
     // 只输 projectCode

@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { getPrisma } from '../prisma'
+const prisma = getPrisma()
 
 export default defineEventHandler(async (event) => {
   const method = event.node.req.method

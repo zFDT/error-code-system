@@ -12,15 +12,13 @@
         <tr v-if="loading">
           <td colspan="2">加载中...</td>
         </tr>
-        <tr v-else-if="modules.length">
-          <template v-for="module in modules" :key="module.moduleCode">
-            <tr>
-              <td>{{ module.name }}</td>
-              <td>{{ module.moduleCode }}</td>
-            </tr>
-          </template>
-        </tr>
-        <tr v-else-if="!loading">
+        <template v-else-if="modules.length">
+          <tr v-for="module in modules" :key="module.moduleCode">
+            <td>{{ module.name }}</td>
+            <td>{{ module.moduleCode }}</td>
+          </tr>
+        </template>
+        <tr v-else>
           <td colspan="2">暂无模块数据。</td>
         </tr>
       </tbody>
@@ -39,9 +37,15 @@ export default defineComponent({
     const loading = ref<boolean>(true);
 
     const fetchModules = async () => {
-      const res = await axios.get('/api/module');
-      modules.value = res.data.data || [];
-      loading.value = false;
+      try {
+        loading.value = true;
+        const res = await axios.get('/api/module');
+        modules.value = res.data.data || [];
+      } catch (e) {
+        modules.value = [];
+      } finally {
+        loading.value = false;
+      }
     };
 
     onMounted(fetchModules);
