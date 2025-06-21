@@ -1,9 +1,10 @@
 <template>
   <div>
-    <button @click="openCreateDialog">添加新项目</button>
+    <button @click="goBack">返回</button>
   </div>
   <div>
     <h1>项目列表</h1>
+    <button @click="openCreateDialog">添加新项目</button>
     <table class="project-table">
       <thead>
         <tr>
@@ -188,6 +189,10 @@ const submitEdit = async () => {
     editError.value = e.message;
   }
 };
+
+function goBack() {
+  router.back();
+}
 </script>
 
 <style scoped>

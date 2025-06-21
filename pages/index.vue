@@ -10,8 +10,6 @@
     <nav>
       <ul>
         <li><nuxt-link to="/projects">项目管理</nuxt-link></li>
-        <!-- <li><nuxt-link to="/modules">模块管理</nuxt-link></li> -->
-        <!-- <li><nuxt-link to="/errors">错误管理</nuxt-link></li> -->
         <li><nuxt-link to="/error-code">错误码查询</nuxt-link></li>
       </ul>
     </nav>
