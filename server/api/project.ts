@@ -32,4 +32,21 @@ export default defineEventHandler(async (event) => {
     console.log('[API] /api/project 响应内容:', project)
     return { code: 0, data: project }
   }
+  // 新增 PATCH 方法，支持修改项目名称
+  if (method === 'PATCH') {
+    const id = event.context.params?.id || event.node.req.url?.split('/').pop();
+    const body = await readBody(event);
+    const { name } = body;
+    if (!id || !name) {
+      const res = { code: 1, message: '参数缺失' };
+      console.log('[API] /api/project PATCH 响应内容:', res);
+      return res;
+    }
+    const updated = await prisma.project.update({
+      where: { id: Number(id) },
+      data: { name }
+    });
+    console.log('[API] /api/project PATCH 响应内容:', updated);
+    return { code: 0, data: updated };
+  }
 })

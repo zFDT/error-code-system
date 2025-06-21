@@ -1,16 +1,22 @@
 <template>
   <div class="modal">
     <div class="modal-content">
-      <h3>添加错误码</h3>
-      <label>错误名称：</label>
-      <input v-model="name" />
-      <label>错误描述：</label>
-      <input v-model="description" />
-      <div v-if="error" class="error">{{ error }}</div>
-      <div class="modal-actions">
-        <button @click="handleAdd">确定</button>
-        <button @click="emit('close')">取消</button>
-      </div>
+      <h3 class="modal-title">添加错误码</h3>
+      <form @submit.prevent="handleAdd">
+        <div class="form-group">
+          <label for="error-name">错误名称：</label>
+          <input id="error-name" v-model="name" placeholder="请输入错误名称" />
+        </div>
+        <div class="form-group">
+          <label for="error-desc">错误描述：</label>
+          <input id="error-desc" v-model="description" placeholder="请输入错误描述" />
+        </div>
+        <div v-if="error" class="error">{{ error }}</div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">确定</button>
+          <button type="button" class="btn btn-cancel" @click="emit('close')">取消</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -56,19 +62,66 @@ async function handleAdd() {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 .modal-content {
   background: #fff;
-  padding: 24px;
-  border-radius: 6px;
-  min-width: 320px;
+  padding: 32px 28px 24px 28px;
+  border-radius: 8px;
+  min-width: 340px;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+.modal-title {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+input {
+  padding: 8px 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  font-size: 15px;
 }
 .modal-actions {
   margin-top: 16px;
   text-align: right;
 }
+.btn {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  color: #333;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+.btn-primary {
+  background: #1677ff;
+  color: #fff;
+}
+.btn-cancel:hover {
+  background: #e6e6e6;
+}
+.btn:active {
+  opacity: 0.85;
+}
 .error {
-  color: red;
+  color: #e74c3c;
   margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: left;
+  font-size: 14px;
 }
 </style>
