@@ -39,5 +39,9 @@ model Error {
   errorCode   String  // 错误编号，如001
   moduleId    Int
   module      Module  @relation(fields: [moduleId], references: [id])
+  // 新增字段
+  projectCode String? // 项目代码，如006
+  moduleCode  String? // 模块代码，如01
+  code        String? // 错误代码，如001
   @@unique([moduleId, errorCode]) // 同一模块下错误编号唯一
 }

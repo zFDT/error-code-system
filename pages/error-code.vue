@@ -1,11 +1,29 @@
 <template>
   <div class="error-code-search">
     <h1>错误码查询</h1>
-    <input
-      v-model="query"
-      placeholder="请输入错误码（如 XXX-XX-XXX、XXX-XX 或 XXX）"
-      @input="onInput"
-    />
+    <div class="input-group">
+      <input
+        v-model="projectCode"
+        placeholder="项目代码 (如 006)"
+        maxlength="3"
+        @input="onInput"
+        style="width: 120px; margin-right: 8px;"
+      />
+      <input
+        v-model="moduleCode"
+        placeholder="模块代码 (如 01)"
+        maxlength="2"
+        @input="onInput"
+        style="width: 100px; margin-right: 8px;"
+      />
+      <input
+        v-model="errorCode"
+        placeholder="错误代码 (如 001)"
+        maxlength="3"
+        @input="onInput"
+        style="width: 120px;"
+      />
+    </div>
     <table>
       <thead>
         <tr>
@@ -35,7 +53,7 @@
             <td>{{ item.description }}</td>
           </tr>
         </template>
-        <tr v-else-if="query && !loading">
+        <tr v-else-if="(projectCode || moduleCode || errorCode) && !loading">
           <td colspan="5">未找到匹配的错误码。</td>
         </tr>
       </tbody>
@@ -47,19 +65,28 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const query = ref('')
+const projectCode = ref('')
+const moduleCode = ref('')
+const errorCode = ref('')
 const results = ref<any[]>([])
 const loading = ref(false)
 let timer: any = null
 const router = useRouter()
 
-async function fetchErrorCodes(q: string) {
+function buildQueryObj() {
+  return {
+    projectCode: projectCode.value.trim(),
+    moduleCode: moduleCode.value.trim(),
+    errorCode: errorCode.value.trim(),
+  }
+}
+
+async function fetchErrorCodes() {
   loading.value = true
   try {
     const { data } = await useFetch('/api/error-code', {
-      query: { query: q }
+      query: buildQueryObj()
     })
-    // 适配后端返回结构
     results.value = data.value?.data || []
   } catch (e) {
     results.value = []
@@ -69,12 +96,13 @@ async function fetchErrorCodes(q: string) {
 
 function onInput() {
   clearTimeout(timer)
-  if (!query.value.trim()) {
+  const { projectCode: p, moduleCode: m, errorCode: e } = buildQueryObj()
+  if (!p && !m && !e) {
     results.value = []
     return
   }
   timer = setTimeout(() => {
-    fetchErrorCodes(query.value.trim())
+    fetchErrorCodes()
   }, 400)
 }
 
@@ -104,10 +132,13 @@ function goDetail(item: any) {
   border-radius: 8px;
   background: #fafbfc;
 }
-input {
-  width: 100%;
-  padding: 8px;
+.input-group {
+  display: flex;
   margin-bottom: 16px;
+}
+input {
+  padding: 8px;
+  margin-right: 8px;
   font-size: 16px;
 }
 table {
