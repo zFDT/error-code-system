@@ -1,0 +1,82 @@
+/* 全局通用样式合并自各组件 */
+.modal {
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content, .modal {
+  background: #fff;
+  padding: 32px 28px 24px 28px;
+  border-radius: 8px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+.modal-title {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+input, textarea {
+  padding: 8px 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  font-size: 15px;
+}
+.modal-actions {
+  margin-top: 16px;
+  text-align: right;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.btn {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  color: #333;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+.btn-primary {
+  background: #1677ff;
+  color: #fff;
+}
+.btn-cancel:hover {
+  background: #e6e6e6;
+}
+.btn:active {
+  opacity: 0.85;
+}
+.error {
+  color: #e74c3c;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: left;
+  font-size: 14px;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}

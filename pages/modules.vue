@@ -5,7 +5,7 @@
         <button @click="goHome">首页</button>
         <button @click="goBack">返回上一页</button>
       </div>
-      <div class="header-title">{{ projectName }}模块列表</div>
+      <div class="header-title">{{ projectName }} 模块列表</div>
       <div class="header-right">
         <button @click="showAdd = true">添加模块</button>
       </div>
