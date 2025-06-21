@@ -14,11 +14,12 @@
           <th>模块名称</th>
           <th>模块编码</th>
           <th>项目名称</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="loading">
-          <td colspan="3">加载中...</td>
+          <td colspan="4">加载中...</td>
         </tr>
         <template v-else-if="modules.length">
           <tr v-for="module in modules" :key="module.id">
@@ -27,13 +28,29 @@
             </td>
             <td>{{ module.moduleCode }}</td>
             <td>{{ module.projectName }}</td>
+            <td>
+              <button @click="openEditDialog(module)">编辑</button>
+            </td>
           </tr>
         </template>
         <tr v-else>
-          <td colspan="3">暂无模块数据。</td>
+          <td colspan="4">暂无模块数据。</td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- 编辑模块名称弹窗 -->
+  <div v-if="editDialogVisible" class="modal-overlay">
+    <div class="modal">
+      <h2>编辑模块名称</h2>
+      <input v-model="editModuleName" type="text" />
+      <div class="modal-actions">
+        <button @click="submitEdit">保存</button>
+        <button @click="closeEditDialog">取消</button>
+      </div>
+      <div v-if="editError" class="error">{{ editError }}</div>
+    </div>
   </div>
 </template>
 
@@ -48,6 +65,10 @@ const projectId = route.query.project as string
 const modules = ref<any[]>([])
 const loading = ref(false)
 const showAdd = ref(false)
+const editDialogVisible = ref(false)
+const editModule = ref<any>(null)
+const editModuleName = ref('')
+const editError = ref('')
 
 async function fetchModules() {
   loading.value = true
@@ -64,6 +85,41 @@ function handleAddSuccess() {
 
 function goToErrorCodes(module: any) {
   router.push({ path: '/errors', query: { moduleId: module.id, projectId } })
+}
+
+function openEditDialog(module: any) {
+  editModule.value = module
+  editModuleName.value = module.name
+  editError.value = ''
+  editDialogVisible.value = true
+}
+function closeEditDialog() {
+  editDialogVisible.value = false
+  editModule.value = null
+  editModuleName.value = ''
+  editError.value = ''
+}
+const submitEdit = async () => {
+  if (!editModule.value || !editModuleName.value.trim()) {
+    editError.value = '模块名称不能为空'
+    return
+  }
+  try {
+    const res = await fetch(`/api/module/${editModule.value.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: editModuleName.value.trim() })
+    })
+    const data = await res.json()
+    if (data.code !== 0) {
+      editError.value = data.message || '修改失败'
+    } else {
+      closeEditDialog()
+      fetchModules()
+    }
+  } catch (e: any) {
+    editError.value = e.message
+  }
 }
 
 onMounted(() => {
@@ -101,5 +157,31 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal {
+  background: #fff;
+  padding: 24px 32px;
+  border-radius: 8px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px #8882;
+}
+.modal-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.error {
+  color: red;
+  margin-top: 8px;
 }
 </style>
