@@ -1,75 +1,25 @@
-# Nuxt Minimal Starter
+# 设备错误码查询系统
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+面向设备（3D 打印机 / IoT 设备）的错误码管理与查询系统：错误码 CRUD、模块归类、项目维度管理，支持搜索与筛选。
 
-## Setup
+## 技术栈
 
-Make sure to install dependencies:
+- **前端**：Nuxt 3 + Vue 3
+- **数据层**：Prisma ORM
+- **页面**：错误码 / 模块 / 项目 / 错误分类
+
+## 目录
+
+```
+pages/           # 页面（error-code / errors / index / modules / projects）
+server/          # Nuxt Server API + Prisma
+components/      # 组件
+prisma/          # 数据模型
+```
+
+## 运行
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
